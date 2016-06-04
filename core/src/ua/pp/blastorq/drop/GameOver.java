@@ -21,12 +21,13 @@ public  class GameOver implements Screen {
     OrthographicCamera camera;
     Texture bg;
     int canStartAgain = 100;
-    int score;
+    int score , highscore;
 
 
-    public GameOver(final Drop gam, int scor) {
+    public GameOver(final Drop gam, int scor , int highscor) {
         game = gam;
         score = scor;
+        highscore = highscor;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
     }
@@ -47,6 +48,8 @@ public  class GameOver implements Screen {
         game.batch.begin();
         game.font.draw(game.batch, "Game over!", 100, 150);
         game.font.draw(game.batch, "Your score is "+score, 100, 125);
+        game.font.draw(game.batch, "Your highscore is "+highscore, 100, 115);
+
         game.font.draw(game.batch, "Tap anywhere to try again", 100, 100);
         game.batch.end();
 

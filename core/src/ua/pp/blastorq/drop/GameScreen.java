@@ -36,13 +36,13 @@ public class GameScreen implements Screen {
     Array<Rectangle> raindrops;
     long lastDropTime;
     public int dropsGatchered;
-    int speed = 0;
+    int speed = 0  ;
+    Integer highscore = 0;
     long timeStart = TimeUtils.nanoTime();
     long second = 1000000000;
     long timePlus = 30;
     long timeEnd = timeStart + timePlus*second;
     Array<Texture> bgs;
-    Array<Texture> activeBgs;
     int bgId = 0;
     int bgId2 = 0;
     int bgCnt = 27;
@@ -142,8 +142,8 @@ public class GameScreen implements Screen {
             moveL = bucket.x > touchPos.x - 32 - 8;
             moveR = bucket.x < touchPos.x - 32 + 8;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || moveL) bucket.x -= (500+speed) * Gdx.graphics.getDeltaTime();
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || moveR) bucket.x += (500+speed) * Gdx.graphics.getDeltaTime();
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || moveL) bucket.x -= (400+speed) * Gdx.graphics.getDeltaTime();
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || moveR) bucket.x += (400+speed) * Gdx.graphics.getDeltaTime();
 
         if (bucket.x < 0) bucket.x = 0;
         if (bucket.x > 800 - 64) bucket.x = 800 - 64;
@@ -164,8 +164,9 @@ public class GameScreen implements Screen {
             }
         }
         if(deltaTime<=0) {
-            game.setScreen(new GameOver(game, dropsGatchered));
+            game.setScreen(new GameOver(game, dropsGatchered , highscore));
         }
+        if(dropsGatchered > highscore)highscore = dropsGatchered;
     }
     @Override
     public void resize(int width, int height) {

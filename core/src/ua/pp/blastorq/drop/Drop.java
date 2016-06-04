@@ -15,7 +15,7 @@ public class Drop extends Game {
 	public void create() {
 		batch = new SpriteBatch();
 		font = new BitmapFont();
-		this.setScreen(new StartLoading( this, new MainMenuScreen(this), 5 ));
+		this.setScreen(new SplashScreen( this));
 
 	}
 
