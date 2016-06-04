@@ -68,4 +68,8 @@ public class MainMenuScreen implements Screen {
     public void dispose() {
 
     }
+
+    public Drop getGame() {
+        return game;
+    }
 }
