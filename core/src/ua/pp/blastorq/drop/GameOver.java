@@ -19,7 +19,7 @@ public  class GameOver implements Screen {
     final Drop game;
     boolean isPaused;
     OrthographicCamera camera;
-    Texture bg;
+    Texture bg = new Texture("bg/gameover_bg.jpg");
     int canStartAgain = 100;
     int score , highscore;
 
@@ -49,6 +49,7 @@ public  class GameOver implements Screen {
         game.font.draw(game.batch, "Game over!", 100, 150);
         game.font.draw(game.batch, "Your score is "+score, 100, 125);
         game.font.draw(game.batch, "Your highscore is "+highscore, 100, 115);
+        game.batch.draw(bg, 0, 0);
 
         game.font.draw(game.batch, "Tap anywhere to try again", 100, 100);
         game.batch.end();
