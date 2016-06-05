@@ -40,7 +40,7 @@ public class GameScreen implements Screen {
     Integer highscore = 0;
     long timeStart = TimeUtils.nanoTime();
     long second = 1000000000;
-    long timePlus = 30;
+    long timePlus = 63;//60 секунд + 3 секунди що гра пролагує)
     long timeEnd = timeStart + timePlus*second;
     Array<Texture> bgs;
     int bgId = 0;
