@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -49,8 +50,11 @@ public class GameScreen implements Screen {
     int bgL = 0;
     int touchLimit = 0;
     boolean newBgLoaded = true;
-
     long timeBgInit = 0;
+    BitmapFont font32 = new BitmapFont(Gdx.files.internal("fonts/BadScript-64.fnt"), false);
+    BitmapFont font48 = new BitmapFont(Gdx.files.internal("fonts/BadScript-64.fnt"), false);
+    BitmapFont font64 = new BitmapFont(Gdx.files.internal("fonts/BadScript-64.fnt"), false);
+    BitmapFont font128 = new BitmapFont(Gdx.files.internal("fonts/BadScript-128.fnt"), false);
 
     public GameScreen(final Drop gam) {
         this.game = gam;
@@ -74,8 +78,6 @@ public class GameScreen implements Screen {
         bucket.height = 64;
 
         raindrops = new Array<Rectangle>();
-        spawnRaindrop();
-
     }
 
     private void spawnRaindrop() {
@@ -123,8 +125,9 @@ public class GameScreen implements Screen {
         game.batch.draw(bgs.get(bgId), 0, 0);
         game.batch.draw(bgs.get(bgId2), bgL, 0);
 
-        game.font.draw(game.batch, "Your Score is: " + dropsGatchered, 0, 480);
-        game.font.draw(game.batch, "Time left: " + deltaTime, 240, 480);
+        font48.setColor(1, 1, 1, 1);
+        font48.draw(game.batch, "Рахунок: " + dropsGatchered, 0, 480);
+        font48.draw(game.batch, "Часу залишилось: " + deltaTime, 240, 480);
         game.batch.draw(bucketImage, bucket.x, bucket.y);
 
         for (Rectangle raindrop : raindrops) {
