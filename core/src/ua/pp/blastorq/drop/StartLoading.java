@@ -65,7 +65,7 @@ public class StartLoading implements Screen{
         };
 
         Tween.to(sprite, SpriteAccessor.ALPHA, 0.8f).target(1)
-                .ease(TweenEquations.easeInOutQuad).repeatYoyo(1, 0.4f)
+                .ease(TweenEquations.easeInOutQuad).repeatYoyo(1, 1.4f)
                 .setCallback(callback).setCallbackTriggers(TweenCallback.COMPLETE)
                 .start(manager);
     }
@@ -73,7 +73,7 @@ public class StartLoading implements Screen{
     @Override
     public void render(float delta) {
         manager.update(delta);
-        Gdx.gl.glClearColor(1, 0.7529f, 0, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         sprite.draw(batch);
