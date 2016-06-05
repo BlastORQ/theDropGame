@@ -11,6 +11,7 @@ public class MainMenuScreen implements Screen {
     final Drop game;
     OrthographicCamera camera;
 
+    Texture bg = new Texture("bg/mainmenu_bg.jpg");
 
     public MainMenuScreen(final Drop gam) {
         game = gam;
@@ -35,6 +36,7 @@ public class MainMenuScreen implements Screen {
         game.batch.begin();
         game.font.draw(game.batch, "Welcome to Drop!", 100, 150);
         game.font.draw(game.batch, "Tap anywhere to begin!", 100, 100);
+        game.batch.draw(bg, 0, 0);
         game.batch.end();
 
         if (Gdx.input.isTouched()){
