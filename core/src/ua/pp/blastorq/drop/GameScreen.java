@@ -5,9 +5,12 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -26,8 +29,6 @@ public class GameScreen implements Screen {
 
     final Drop game;
     OrthographicCamera camera;
-    SpriteBatch batch;
-
     Texture dropImage;
     Texture bucketImage;
     Sound dropSound;
@@ -36,21 +37,24 @@ public class GameScreen implements Screen {
     Vector3 touchPos;
     Array<Rectangle> raindrops;
     long lastDropTime;
+
     public int dropsGatchered;
     int speed = 0  ;
-    Integer highscore = 0;
-    long timeStart = TimeUtils.nanoTime();
+    int highscore = 0;
+
     long second = 1000000000;
-    long timePlus = 63;//60 секунд + 3 секунди що гра пролагує)
-    long timeEnd = timeStart + timePlus*second;
+
     Array<Texture> bgs;
     int bgId = 0;
     int bgId2 = 0;
     int bgCnt = 27;
     int bgL = 0;
-    int touchLimit = 0;
     boolean newBgLoaded = true;
     long timeBgInit = 0;
+
+    //Полоска скіки ще лишилось
+    Double barWidth = 800.00;
+
     BitmapFont font32 = new BitmapFont(Gdx.files.internal("fonts/BadScript-64.fnt"), false);
     BitmapFont font48 = new BitmapFont(Gdx.files.internal("fonts/BadScript-64.fnt"), false);
     BitmapFont font64 = new BitmapFont(Gdx.files.internal("fonts/BadScript-64.fnt"), false);
@@ -103,11 +107,12 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         long timeNow = TimeUtils.nanoTime();
-        long deltaTime = Math.round((timeEnd - timeNow)/second);
 
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
+
         game.batch.begin();
+
 
         if(timeNow - 5*second > timeBgInit){
             timeBgInit = timeNow;
@@ -126,13 +131,26 @@ public class GameScreen implements Screen {
         game.batch.draw(bgs.get(bgId2), bgL, 0);
 
         font48.setColor(1, 1, 1, 1);
-        font48.draw(game.batch, "Рахунок: " + dropsGatchered, 0, 480);
-        font48.draw(game.batch, "Часу залишилось: " + deltaTime, 240, 480);
+        font48.draw(game.batch, "Рахунок: " + dropsGatchered, 0, 470);
         game.batch.draw(bucketImage, bucket.x, bucket.y);
 
         for (Rectangle raindrop : raindrops) {
             game.batch.draw(dropImage, raindrop.x, raindrop.y);
         }
+
+        //Полоска скіки залишилось
+        Rectangle wr = new Rectangle();
+        Pixmap wpm = new Pixmap(100, 100, Pixmap.Format.RGBA8888);
+        wpm.setColor(new Color(
+                1,
+                ((barWidth < 100) ? ((barWidth < 50) ? 0 : 0.5f) : 1),
+                ((barWidth < 100) ? ((barWidth < 50) ? 0 : 0.5f) : 1),
+                1));
+        wpm.fillRectangle(0, 0, 100, 100);
+        Texture texture = new Texture(wpm);
+        wpm.dispose();
+        game.batch.draw(texture, 0, 476, Math.round(barWidth), 5);
+        barWidth -= (barWidth>400)?0.7:0.9;
 
 
         game.batch.end();
@@ -145,31 +163,35 @@ public class GameScreen implements Screen {
             moveL = bucket.x > touchPos.x - 32 - 8;
             moveR = bucket.x < touchPos.x - 32 + 8;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || moveL) bucket.x -= (400+speed) * Gdx.graphics.getDeltaTime();
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || moveR) bucket.x += (400+speed) * Gdx.graphics.getDeltaTime();
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || moveL) bucket.x -= (400 + speed/2) * Gdx.graphics.getDeltaTime();
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || moveR) bucket.x += (400 + speed/2) * Gdx.graphics.getDeltaTime();
 
         if (bucket.x < 0) bucket.x = 0;
         if (bucket.x > 800 - 64) bucket.x = 800 - 64;
 
-        if (TimeUtils.nanoTime() - lastDropTime > second){
+        if (TimeUtils.nanoTime() - lastDropTime > second*(Math.random() + 1)){
             spawnRaindrop();
         }
 
         Iterator<Rectangle> iter = raindrops.iterator();
         while (iter.hasNext()) {
             Rectangle raindrop = iter.next();
-            raindrop.y -= (200+speed) * Gdx.graphics.getDeltaTime();
+            raindrop.y -= (200 + (speed * 1.5)) * Gdx.graphics.getDeltaTime();
             if (raindrop.y + 64 < 0) iter.remove();
             if (raindrop.overlaps(bucket)) {
                 dropsGatchered++;
                 speed = dropsGatchered*2;
+                barWidth += (barWidth<800 - 1)
+                        ?(10 + speed * 1.5)*(Math.random()/2 + 0.75)
+                        :-10;
                 iter.remove();
             }
         }
-        if(deltaTime<=0) {
+        if(barWidth<=0) {
             game.setScreen(new GameOver(game, dropsGatchered , highscore));
         }
         if(dropsGatchered > highscore)highscore = dropsGatchered;
+
     }
     @Override
     public void resize(int width, int height) {
