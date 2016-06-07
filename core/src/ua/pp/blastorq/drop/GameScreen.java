@@ -32,6 +32,8 @@ public class GameScreen implements Screen {
     Texture dropImage;
     Texture bucketImage;
     Sound dropSound;
+    int scrW = Gdx.graphics.getWidth();
+    int scrH = Gdx.graphics.getHeight();
     Music rainMusic;
     Rectangle bucket;
     Vector3 touchPos;
@@ -53,7 +55,7 @@ public class GameScreen implements Screen {
     long timeBgInit = 0;
 
     //Полоска скіки ще лишилось
-    Double barWidth = 800.00;
+    Double barWidth = (double)scrW;
 
     BitmapFont font32 = new BitmapFont(Gdx.files.internal("fonts/BadScript-64.fnt"), false);
     BitmapFont font48 = new BitmapFont(Gdx.files.internal("fonts/BadScript-64.fnt"), false);
@@ -63,7 +65,7 @@ public class GameScreen implements Screen {
     public GameScreen(final Drop gam) {
         this.game = gam;
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 480);
+        camera.setToOrtho(false, scrW, scrH);
 
         touchPos = new Vector3();
 
@@ -76,7 +78,7 @@ public class GameScreen implements Screen {
         }
         bgId = 0;
         bucket = new Rectangle();
-        bucket.x = 800 / 2 - 64 / 2;
+        bucket.x = scrW / 2 - 64 / 2;
         bucket.y = 20;
         bucket.width = 64;
         bucket.height = 64;
@@ -86,8 +88,8 @@ public class GameScreen implements Screen {
 
     private void spawnRaindrop() {
         Rectangle raindrop = new Rectangle();
-        raindrop.x = MathUtils.random(0, 800 - 64);
-        raindrop.y = 480;
+        raindrop.x = MathUtils.random(0, scrW - 64);
+        raindrop.y = scrH;
         raindrop.width = 64;
         raindrop.height = 64;
         raindrops.add(raindrop);
@@ -121,7 +123,7 @@ public class GameScreen implements Screen {
         }
         if(!newBgLoaded){
             bgL -= 1000 * Gdx.graphics.getDeltaTime();
-            if(bgL < -800){
+            if(bgL < -scrW){
                 newBgLoaded = true;
                 bgL = 0;
                 bgId2 = bgId;
@@ -131,7 +133,7 @@ public class GameScreen implements Screen {
         game.batch.draw(bgs.get(bgId2), bgL, 0);
 
         font48.setColor(1, 1, 1, 1);
-        font48.draw(game.batch, "Рахунок: " + dropsGatchered, 0, 470);
+        font48.draw(game.batch, "Рахунок: " + dropsGatchered, 0, scrH - 10);
         game.batch.draw(bucketImage, bucket.x, bucket.y);
 
         for (Rectangle raindrop : raindrops) {
@@ -149,8 +151,8 @@ public class GameScreen implements Screen {
         wpm.fillRectangle(0, 0, 100, 100);
         Texture texture = new Texture(wpm);
         wpm.dispose();
-        game.batch.draw(texture, 0, 476, Math.round(barWidth), 5);
-        barWidth -= (barWidth>400)?0.7:0.9;
+        game.batch.draw(texture, 0, scrH - 4 , Math.round(barWidth), 5);
+        barWidth -= (barWidth>scrW/2)?0.7:0.9;
 
 
         game.batch.end();
@@ -167,7 +169,7 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || moveR) bucket.x += (400 + speed/2) * Gdx.graphics.getDeltaTime();
 
         if (bucket.x < 0) bucket.x = 0;
-        if (bucket.x > 800 - 64) bucket.x = 800 - 64;
+        if (bucket.x > scrW - 64) bucket.x = scrW - 64;
 
         if (TimeUtils.nanoTime() - lastDropTime > second*(Math.random() + 1)){
             spawnRaindrop();
