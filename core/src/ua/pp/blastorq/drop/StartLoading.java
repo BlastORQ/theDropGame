@@ -22,10 +22,10 @@ public class StartLoading implements Screen{
     private SpriteBatch batch;
     private Sprite sprite ,logo;
     Texture f;
-    private Drop game;
+    private ScreenTest game;
     private Screen nextScreen;
 
-    public StartLoading(Drop game, Screen nextScreen) {
+    public StartLoading(ScreenTest game, Screen nextScreen) {
         this.game = game;
         this.nextScreen = nextScreen;
     }
@@ -44,7 +44,7 @@ public class StartLoading implements Screen{
         float desiredWidth = width * 0.7f;
         float scale = sprite.getWidth();
 
-        sprite.setSize(800, 480);
+        sprite.setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         sprite.setPosition(0 , 0);
 
         setupTween();

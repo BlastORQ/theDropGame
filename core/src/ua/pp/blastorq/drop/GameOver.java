@@ -6,44 +6,43 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector3;
 
-import java.awt.Rectangle;
-
+import ua.pp.blastorq.drop.screens.GameScreen;
 
 /**
- * Created by Мама on 24.04.2016.
+ * Created by serhij on 06.07.2016.
  */
-public  class GameOver implements Screen {
-
-
-    final Drop game;
+public class GameOver implements Screen {
+   ScreenTest game;
+    int dropsGatchered;
+    int highscore;
     boolean isPaused;
     OrthographicCamera camera;
     int canStartAgain = 100;
-    int score , highscore;
     Texture bg = new Texture("bg/gameover_bg.jpg");
     BitmapFont font32 = new BitmapFont(Gdx.files.internal("fonts/BadScript-64.fnt"), false);
     BitmapFont font48 = new BitmapFont(Gdx.files.internal("fonts/BadScript-64.fnt"), false);
     BitmapFont font64 = new BitmapFont(Gdx.files.internal("fonts/BadScript-64.fnt"), false);
     BitmapFont font128 = new BitmapFont(Gdx.files.internal("fonts/BadScript-128.fnt"), false);
 
-
-    public GameOver(final Drop gam, int scor , int highscor) {
-        game = gam;
-        score = scor;
-        highscore = highscor;
+    public GameOver(final ScreenTest game, int dropsGatchered, int highscore) {
+        this.game = game;
+        this.dropsGatchered = dropsGatchered;
+        this.highscore = highscore;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
-    }
 
+
+    }
     @Override
     public void show() {
 
     }
 
+
+
     @Override
+
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -63,10 +62,10 @@ public  class GameOver implements Screen {
         font128.draw(game.batch, "Game over!", 260-1, 320+1);
         font128.draw(game.batch, "Game over!", 260-1, 320-1);
 
-        font64.draw(game.batch, "Твій рахунок - "+score, 275+1, 210+1);
-        font64.draw(game.batch, "Твій рахунок - "+score, 275+1, 210-1);
-        font64.draw(game.batch, "Твій рахунок - "+score, 275-1, 210+1);
-        font64.draw(game.batch, "Твій рахунок - "+score, 275-1, 210-1);
+        font64.draw(game.batch, "Твій рахунок - "+ highscore, 275+1, 210+1);
+        font64.draw(game.batch, "Твій рахунок - "+ highscore, 275+1, 210-1);
+        font64.draw(game.batch, "Твій рахунок - "+highscore, 275-1, 210+1);
+        font64.draw(game.batch, "Твій рахунок - "+highscore, 275-1, 210-1);
 
         font64.draw(game.batch, "Клікни будь-де щоб спробувати знову", 175+1, 160+1);
         font64.draw(game.batch, "Клікни будь-де щоб спробувати знову", 175+1, 160-1);
@@ -77,7 +76,7 @@ public  class GameOver implements Screen {
         font64.setColor(1, 1, 1, 1);
         font128.setColor(1, 1, 1, 1);
         font128.draw(game.batch, "Game over!", 260, 320);
-        font64.draw(game.batch, "Твій рахунок - "+score, 275, 210);
+        font64.draw(game.batch, "Твій рахунок - "+highscore, 275, 210);
         font64.draw(game.batch, "Клікни будь-де щоб спробувати знову", 175, 160);
 
         game.batch.end();
@@ -88,6 +87,7 @@ public  class GameOver implements Screen {
         }else{
             canStartAgain--;
         }
+
     }
 
     @Override

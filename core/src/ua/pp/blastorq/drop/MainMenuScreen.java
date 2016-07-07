@@ -7,10 +7,13 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
+import ua.pp.blastorq.drop.screens.GameScreen;
 
+/**
+ * Created by serhij on 06.07.2016.
+ */
 public class MainMenuScreen implements Screen {
-
-    final Drop game;
+    ScreenTest game;
     OrthographicCamera camera;
     Texture bg = new Texture("bg/mainmenu_bg.jpg");
     BitmapFont font32 = new BitmapFont(Gdx.files.internal("fonts/BadScript-64.fnt"), false);
@@ -18,8 +21,9 @@ public class MainMenuScreen implements Screen {
     BitmapFont font64 = new BitmapFont(Gdx.files.internal("fonts/BadScript-64.fnt"), false);
     BitmapFont font128 = new BitmapFont(Gdx.files.internal("fonts/BadScript-128.fnt"), false);
 
-    public MainMenuScreen(final Drop gam) {
-        game = gam;
+    public MainMenuScreen(final ScreenTest gam) {
+game = gam;
+
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
@@ -93,9 +97,5 @@ public class MainMenuScreen implements Screen {
     @Override
     public void dispose() {
 
-    }
-
-    public Drop getGame() {
-        return game;
     }
 }
